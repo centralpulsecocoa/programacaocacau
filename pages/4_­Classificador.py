@@ -321,7 +321,7 @@ st.subheader("Classificações já registradas")
 todas = pd.read_sql_query(
     """
     SELECT d.numero_carga AS "Nº Carga", c.data_classificacao AS "Data de classificação",
-           c.classificador AS "Classificador", p.deposito AS "Depósito", c.tipo_cacau AS "Tipo Cacau", d.residuo AS "Resído (%%),
+           c.classificador AS "Classificador", p.deposito AS "Depósito", c.tipo_cacau AS "Tipo Cacau", d.residuo AS "Resído (%%)",
            c.umidade AS "Umidade (%%)", c.fumaca AS "Fumaça (%%)", c.ardosia AS "Ardósia",
            c.germinado AS "Germinado", c.violeta AS "Violeta",
            c.mofo_interno AS "Mofo Interno", c.mofo_externo AS "Mofo Externo",
