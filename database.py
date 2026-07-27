@@ -68,6 +68,25 @@ def init_db():
                 UNIQUE(tipo, valor)
             )
         """)
+
+        cur.execute("""CREATE TABLE liberacao_cargas (
+            id SERIAL PRIMARY KEY,
+
+            deposito_operacao_id INTEGER NOT NULL
+                REFERENCES deposito_operacao(id),
+
+            wb TEXT NOT NULL,
+            lote TEXT NOT NULL,
+
+            status TEXT NOT NULL DEFAULT 'PENDENTE',
+
+            solicitado_por TEXT NOT NULL,
+            solicitado_em TEXT NOT NULL,
+
+            aprovado_por TEXT,
+            aprovado_em TEXT
+        )
+        """)
     
         cur.execute("""
             CREATE TABLE IF NOT EXISTS programacoes (
