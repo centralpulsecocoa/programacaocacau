@@ -94,15 +94,15 @@ def listar_pendentes():
     cur.execute("""
         SELECT
             lc.id,
-            do.numero_carga,
+            dep.numero_carga,
             lc.wb,
             lc.lote,
             lc.status,
             lc.solicitado_por,
             lc.solicitado_em
         FROM liberacao_cargas lc
-        INNER JOIN deposito_operacao do
-            ON do.id = lc.deposito_operacao_id
+        INNER JOIN deposito_operacao dep
+            ON dep.id = lc.deposito_operacao_id
         ORDER BY lc.solicitado_em DESC
     """)
 
