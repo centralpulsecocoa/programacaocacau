@@ -69,7 +69,7 @@ def init_db():
             )
         """)
 
-        cur.execute("""CREATE TABLE liberacao_cargas (
+        cur.execute("""CREATE TABLE IF NOT EXISTS liberacao_cargas (
             id SERIAL PRIMARY KEY,
 
             deposito_operacao_id INTEGER NOT NULL
