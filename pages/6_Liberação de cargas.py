@@ -31,10 +31,14 @@ def listar_cargas():
 
     cur.execute("""
         SELECT
-            id,
-            numero_carga
-        FROM deposito_operacao
-        ORDER BY numero_carga
+            d.id,
+            d.numero_carga
+        FROM deposito_operacao d
+        INNER JOIN liberacao_cargas lc
+            ON lc.numero_carga = d.numero_carga
+        WHERE lc.wb IS NOT NULL
+        AND TRIM(lc.wb) <> ''
+        ORDER BY d.numero_carga
     """)
 
     cargas = cur.fetchall()
@@ -47,6 +51,7 @@ def salvar_liberacao(
     deposito_operacao_id,
     wb,
     lote,
+    doc_mat,
     usuario
 ):
     conn = get_connection()
@@ -59,6 +64,7 @@ def salvar_liberacao(
                 wb,
                 lote,
                 status,
+                doc_mat,
                 solicitado_por,
                 solicitado_em
             )
@@ -68,12 +74,14 @@ def salvar_liberacao(
                 %s,
                 'PENDENTE',
                 %s,
+                %s,
                 %s
             )
         """, (
             deposito_operacao_id,
             wb,
             lote,
+            doc_mat,
             usuario,
             agora()
         ))
@@ -94,10 +102,13 @@ def listar_pendentes():
     cur.execute("""
         SELECT
             lc.id,
-            dep.numero_carga,
             lc.wb,
             lc.lote,
-            lc.status,
+            lc.doc_mat,
+            dep.numero_carga,
+            dep.residuo,
+            dep.peso_duplo,
+            dep.qtd_sacos_amostrados,
             lc.solicitado_por,
             lc.solicitado_em
         FROM liberacao_cargas lc
@@ -164,6 +175,19 @@ def atualizar_liberacao(id_liberacao, wb, lote):
     finally:
         conn.close()
 
+def excluir_liberacao(id_liberacao):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        DELETE FROM liberacao_cargas
+        WHERE id = %s
+    """, (id_liberacao,))
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
 # ---------------------------------------------------------
 # Cadastro
 # ---------------------------------------------------------
@@ -171,6 +195,7 @@ def atualizar_liberacao(id_liberacao, wb, lote):
 st.subheader("Nova solicitação")
 
 cargas = listar_cargas()
+
 
 if cargas:
 
@@ -180,7 +205,7 @@ if cargas:
         format_func=lambda x: x["numero_carga"]
     )
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
 
     with col1:
         wb = st.text_input("WB")
@@ -188,12 +213,17 @@ if cargas:
     with col2:
         lote = st.text_input("LOTE")
 
+    with col3:
+        doc_mat = st.text_input("Doc. Mat")
+
     if st.button("Salvar solicitação", type="primary"):
 
         if not wb.strip():
             st.error("Informe o WB.")
         elif not lote.strip():
             st.error("Informe o LOTE.")
+        elif not doc_mat.strip():
+            st.error("Informe o Doc. Mat.")
         else:
 
             salvar_liberacao(
@@ -312,4 +342,22 @@ if user["papel"] in ["Classificador", "Admin"] and dados:
 
             st.success("Registro atualizado.")
             st.rerun()
+    with col2:
+        if st.button("🗑️ Excluir"):
+            st.session_state["confirmar_exclusao"] = True
 
+    if st.session_state.get("confirmar_exclusao"):
+        st.warning("Tem certeza que deseja excluir este registro?")
+
+        c1, c2 = st.columns(2)
+
+        with c1:
+            if st.button("✅ Sim, excluir"):
+                excluir_liberacao(solicitacao_edicao["id"])
+                st.success("Registro excluído.")
+                st.rerun()
+
+        with c2:
+            if st.button("❌ Cancelar"):
+                st.session_state["confirmar_exclusao"] = False
+                st.rerun()

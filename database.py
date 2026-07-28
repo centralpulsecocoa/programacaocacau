@@ -77,6 +77,7 @@ def init_db():
 
             wb TEXT NOT NULL,
             lote TEXT NOT NULL,
+            doc_mat TEXT NOT NULL,
 
             status TEXT NOT NULL DEFAULT 'PENDENTE',
 
