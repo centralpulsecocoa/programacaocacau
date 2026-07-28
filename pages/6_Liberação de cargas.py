@@ -226,6 +226,7 @@ if cargas:
                 deposito_operacao_id=carga["id"],
                 wb=wb.strip(),
                 lote=lote.strip(),
+                doc_mat=doc_mat.strip(),
                 usuario=user["nome_completo"]
             )
 
