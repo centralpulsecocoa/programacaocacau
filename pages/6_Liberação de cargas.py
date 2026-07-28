@@ -139,6 +139,31 @@ def aprovar_liberacao(id_liberacao, usuario):
     finally:
         conn.close()
 
+def atualizar_liberacao(id_liberacao, wb, lote):
+    conn = get_connection()
+    cur = get_cursor(conn)
+
+    try:
+        cur.execute("""
+            UPDATE liberacao_cargas
+               SET wb=%s,
+                   lote=%s
+             WHERE id=%s
+        """, (
+            wb,
+            lote,
+            id_liberacao
+        ))
+
+        conn.commit()
+
+    except:
+        conn.rollback()
+        raise
+
+    finally:
+        conn.close()
+
 # ---------------------------------------------------------
 # Cadastro
 # ---------------------------------------------------------
@@ -192,11 +217,27 @@ st.divider()
 
 st.subheader("Solicitações registradas")
 
+dias_filtro = st.slider(
+    "Exibir registros dos últimos (dias)",
+    min_value=1,
+    max_value=365,
+    value=30
+)
+
 dados = listar_pendentes()
+
 
 if dados:
 
     df = pd.DataFrame(dados)
+
+    df["solicitado_em"] = pd.to_datetime(df["solicitado_em"])
+
+    data_limite = pd.Timestamp.now() - pd.Timedelta(days=dias_filtro)
+
+    df = df[df["solicitado_em"] >= data_limite]
+
+    df["solicitado_em"] = df["solicitado_em"].dt.strftime("%d/%m/%Y %H:%M")
 
     st.dataframe(
         df,
@@ -229,3 +270,46 @@ if dados:
 
 else:
     st.info("Nenhuma solicitação encontrada.")
+
+# ---------------------------------------------------------
+# Edição
+# ---------------------------------------------------------
+
+if user["papel"] in ["Classificador", "Admin"] and dados:
+    st.subheader("Editar solicitação")
+
+    solicitacao_edicao = st.selectbox(
+        "Selecione para editar",
+        dados,
+        key="editar",
+        format_func=lambda x: (
+            f'Carga {x["numero_carga"]} | '
+            f'WB {x["wb"]} | '
+            f'LOTE {x["lote"]}'
+        )
+    )
+
+    novo_wb = st.text_input(
+        "WB",
+        value=solicitacao_edicao["wb"]
+    )
+
+    novo_lote = st.text_input(
+        "LOTE",
+        value=solicitacao_edicao["lote"]
+    )
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        if st.button("💾 Salvar Alterações"):
+
+            atualizar_liberacao(
+                solicitacao_edicao["id"],
+                novo_wb,
+                novo_lote
+            )
+
+            st.success("Registro atualizado.")
+            st.rerun()
+
