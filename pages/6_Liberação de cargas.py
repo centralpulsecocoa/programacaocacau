@@ -34,8 +34,6 @@ def listar_cargas():
             d.id,
             d.numero_carga
         FROM deposito_operacao d
-        INNER JOIN liberacao_cargas lc
-            ON lc.deposito_operacao_id = d.id
         ORDER BY d.numero_carga
     """)
 
