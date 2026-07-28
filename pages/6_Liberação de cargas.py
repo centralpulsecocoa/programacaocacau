@@ -102,6 +102,7 @@ def listar_pendentes():
             lc.lote,
             lc.doc_mat,
             dep.numero_carga,
+            lc.status,
             dep.residuo,
             dep.peso_duplo,
             dep.qtd_sacos_amostrados,
