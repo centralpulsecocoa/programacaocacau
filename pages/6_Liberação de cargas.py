@@ -36,7 +36,6 @@ def listar_cargas():
         FROM deposito_operacao d
         INNER JOIN liberacao_cargas lc
             ON lc.deposito_operacao_id = d.id
-        WHERE TRIM(lc.wb) <> ''
         ORDER BY d.numero_carga
     """)
 
