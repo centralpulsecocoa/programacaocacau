@@ -363,6 +363,7 @@ if user["papel"] in ["Classificador", "Admin"] and dados:
             if st.button("✅ Sim, excluir"):
                 excluir_liberacao(solicitacao_edicao["id"])
                 st.success("Registro excluído.")
+                st.session_state["confirmar_exclusao"] = False
                 st.rerun()
 
         with c2:
