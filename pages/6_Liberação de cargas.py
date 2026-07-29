@@ -34,7 +34,10 @@ def listar_cargas():
             d.id,
             d.numero_carga
         FROM deposito_operacao d
-        ORDER BY d.numero_carga
+        LEFT JOIN liberacao_cargas lc 
+            ON d.numero_carga = lc.numero_carga
+        WHERE lc.numero_carga IS NULL
+        ORDER BY d.numero_carga;
     """)
 
     cargas = cur.fetchall()
@@ -45,6 +48,7 @@ def listar_cargas():
 
 def salvar_liberacao(
     deposito_operacao_id,
+    numero_carga,
     wb,
     lote,
     doc_mat,
@@ -57,6 +61,7 @@ def salvar_liberacao(
         cur.execute("""
             INSERT INTO liberacao_cargas (
                 deposito_operacao_id,
+                numero_carga,
                 wb,
                 lote,
                 status,
@@ -68,6 +73,7 @@ def salvar_liberacao(
                 %s,
                 %s,
                 %s,
+                %s,
                 'PENDENTE',
                 %s,
                 %s,
@@ -75,6 +81,7 @@ def salvar_liberacao(
             )
         """, (
             deposito_operacao_id,
+            numero_carga,
             wb,
             lote,
             doc_mat,
@@ -225,6 +232,7 @@ if cargas:
 
             salvar_liberacao(
                 deposito_operacao_id=carga["id"],
+                numero_carga=carga,
                 wb=wb.strip(),
                 lote=lote.strip(),
                 doc_mat=doc_mat.strip(),
