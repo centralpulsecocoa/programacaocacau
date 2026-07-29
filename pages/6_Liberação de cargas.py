@@ -232,7 +232,7 @@ if cargas:
 
             salvar_liberacao(
                 deposito_operacao_id=carga["id"],
-                numero_carga=carga,
+                numero_carga=carga["numero_carga"].strip(),
                 wb=wb.strip(),
                 lote=lote.strip(),
                 doc_mat=doc_mat.strip(),
