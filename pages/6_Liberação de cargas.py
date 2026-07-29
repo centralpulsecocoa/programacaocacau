@@ -281,6 +281,8 @@ if dados:
         hide_index=True
     )
 
+    st.markdown("---")
+
     # Somente Classificador ou Admin podem alterar
     if user["papel"] in ["Classificador", "Admin"]:
 
