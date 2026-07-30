@@ -287,6 +287,10 @@ if dados:
 
     st.markdown("---")
 
+    if "msg_sucesso" in st.session_state:
+        st.success(st.session_state["msg_sucesso"])
+        del st.session_state["msg_sucesso"]
+
     # Somente Classificador ou Admin podem alterar
     if user["papel"] in ["Classificador", "Admin"]:
 
