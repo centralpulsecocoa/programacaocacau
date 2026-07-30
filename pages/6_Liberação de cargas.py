@@ -300,22 +300,26 @@ dias_filtro = st.slider(
 dados = listar_pendentes()
 dados_all = listar_todas()
 
+
+
 #Exibir todos os dados em DF:
 df = pd.DataFrame(dados_all)
-#Só para aparecer o resíduo como % e não confundir:
-df.rename(columns={"residuo": "residuo (%)"}, inplace=True)
-#Voltando para mostrar o df:
-df["solicitado_em"] = pd.to_datetime(df["solicitado_em"])
-data_limite = pd.Timestamp.now() - pd.Timedelta(days=dias_filtro)
-df = df[df["solicitado_em"] >= data_limite]
-df["solicitado_em"] = df["solicitado_em"].dt.strftime("%d/%m/%Y %H:%M")
-st.dataframe(
-        df,
-        use_container_width=True,
-        hide_index=True
-    )
 
-st.markdown("---")
+if "solicitado_em" in df.columns and df["solicitado_em"].notna().any():
+    #Só para aparecer o resíduo como % e não confundir:
+    df.rename(columns={"residuo": "residuo (%)"}, inplace=True)
+    #Voltando para mostrar o df:
+    df["solicitado_em"] = pd.to_datetime(df["solicitado_em"])
+    data_limite = pd.Timestamp.now() - pd.Timedelta(days=dias_filtro)
+    df = df[df["solicitado_em"] >= data_limite]
+    df["solicitado_em"] = df["solicitado_em"].dt.strftime("%d/%m/%Y %H:%M")
+    st.dataframe(
+            df,
+            use_container_width=True,
+            hide_index=True
+        )
+
+    st.markdown("---")
 
 
 if dados:
