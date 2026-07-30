@@ -302,6 +302,9 @@ dados_all = listar_todas()
 
 #Exibir todos os dados em DF:
 df = pd.DataFrame(dados_all)
+#Só para aparecer o resíduo como % e não confundir:
+df.rename(columns={"residuo": "residuo (%)"}, inplace=True)
+#Voltando para mostrar o df:
 df["solicitado_em"] = pd.to_datetime(df["solicitado_em"])
 data_limite = pd.Timestamp.now() - pd.Timedelta(days=dias_filtro)
 df = df[df["solicitado_em"] >= data_limite]
