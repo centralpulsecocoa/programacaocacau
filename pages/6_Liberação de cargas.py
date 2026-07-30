@@ -300,26 +300,22 @@ dias_filtro = st.slider(
 dados = listar_pendentes()
 dados_all = listar_todas()
 
-
-if dados:
-
-    df = pd.DataFrame(dados_all)
-
-    df["solicitado_em"] = pd.to_datetime(df["solicitado_em"])
-
-    data_limite = pd.Timestamp.now() - pd.Timedelta(days=dias_filtro)
-
-    df = df[df["solicitado_em"] >= data_limite]
-
-    df["solicitado_em"] = df["solicitado_em"].dt.strftime("%d/%m/%Y %H:%M")
-
-    st.dataframe(
+#Exibir todos os dados em DF:
+df = pd.DataFrame(dados_all)
+df["solicitado_em"] = pd.to_datetime(df["solicitado_em"])
+data_limite = pd.Timestamp.now() - pd.Timedelta(days=dias_filtro)
+df = df[df["solicitado_em"] >= data_limite]
+df["solicitado_em"] = df["solicitado_em"].dt.strftime("%d/%m/%Y %H:%M")
+st.dataframe(
         df,
         use_container_width=True,
         hide_index=True
     )
 
-    st.markdown("---")
+st.markdown("---")
+
+
+if dados:
 
     if "msg_sucesso" in st.session_state:
         st.success(st.session_state["msg_sucesso"])
