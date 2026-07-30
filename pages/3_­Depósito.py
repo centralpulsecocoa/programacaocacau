@@ -69,7 +69,7 @@ with tab_nova:
         FROM balanca b
         JOIN programacoes p ON p.id = b.programacao_id
         LEFT JOIN deposito_operacao d ON d.balanca_id = b.id
-        WHERE b.peso_tara IS NULL AND d.id IS NULL
+        WHERE d.id IS NULL
         ORDER BY b.data_pesagem_tara
         """,
         conn,
