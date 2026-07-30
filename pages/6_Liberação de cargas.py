@@ -351,12 +351,12 @@ else:
 # Edição
 # ---------------------------------------------------------
 
-if user["papel"] in ["Admin"] and dados:
+if user["papel"] in ["Admin"] and dados_all:
     st.subheader("Editar solicitação")
 
     solicitacao_edicao = st.selectbox(
         "Selecione para editar",
-        dados,
+        dados_all,
         key="editar",
         format_func=lambda x: (
             f'Carga {x["numero_carga"]} | '
