@@ -84,6 +84,9 @@ def calcular_etapa(row):
 df["status"] = df.apply(calcular_status, axis=1)
 df["etapa_atual"] = df.apply(calcular_etapa, axis=1)
 
+# Garantir tipo datetime
+df["horario"] = pd.to_datetime(df["horario"])
+
 # --- Métricas resumo ---
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Total de programações", len(df))
@@ -95,7 +98,7 @@ st.markdown("---")
 
 # --- Filtros ---
 with st.expander("🔎 Filtros", expanded=True):
-    fc1, fc2, fc3, fc4 = st.columns(4)
+    fc1, fc2, fc3, fc4, fc5 = st.columns(5)
     with fc1:
         status_sel = st.multiselect(
             "Status", ["⚪ Não iniciado", "🟡 Em progresso", "✅ Finalizado"], default=[]
@@ -106,6 +109,8 @@ with st.expander("🔎 Filtros", expanded=True):
         deposito_sel = st.multiselect("Depósito", sorted(df["deposito"].dropna().unique().tolist()))
     with fc4:
         tipo_cacau_sel = st.multiselect("Tipo de cacau", sorted(df["tipo_cacau"].dropna().unique().tolist()))
+    with fc5:
+        data_inicio, data_fim = st.date_input("Período",value=(df["horario"].min().date(),df["horario"].max().date()))
 
 df_filtrado = df.copy()
 if status_sel:
@@ -116,6 +121,10 @@ if deposito_sel:
     df_filtrado = df_filtrado[df_filtrado["deposito"].isin(deposito_sel)]
 if tipo_cacau_sel:
     df_filtrado = df_filtrado[df_filtrado["tipo_cacau"].isin(tipo_cacau_sel)]
+
+# Filtro de período
+df_filtrado = df_filtrado[
+    df_filtrado["horario"].dt.date.between(data_inicio,data_fim)]
 
 st.markdown("---")
 st.subheader(f"Detalhamento do processo ({len(df_filtrado)} registros)")
