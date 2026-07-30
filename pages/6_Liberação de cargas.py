@@ -158,7 +158,7 @@ def aprovar_liberacao(id_liberacao, usuario):
     finally:
         conn.close()
 
-def atualizar_liberacao(id_liberacao, wb, lote):
+def atualizar_liberacao(id_liberacao, wb, lote, doc_mat):
     conn = get_connection()
     cur = get_cursor(conn)
 
@@ -166,11 +166,14 @@ def atualizar_liberacao(id_liberacao, wb, lote):
         cur.execute("""
             UPDATE liberacao_cargas
                SET wb=%s,
-                   lote=%s
+                   lote=%s,
+                   doc_mat=%s,
+                   status = 'PENDENTE'
              WHERE id=%s
         """, (
             wb,
             lote,
+            doc_mat,
             id_liberacao
         ))
 
@@ -321,7 +324,7 @@ else:
 # Edição
 # ---------------------------------------------------------
 
-if user["papel"] in ["Classificador", "Admin"] and dados:
+if user["papel"] in ["Admin"] and dados:
     st.subheader("Editar solicitação")
 
     solicitacao_edicao = st.selectbox(
@@ -345,6 +348,12 @@ if user["papel"] in ["Classificador", "Admin"] and dados:
         value=solicitacao_edicao["lote"]
     )
 
+    novo_doc_mat = st.text_input(
+        "Doc. Mat",
+        value=solicitacao_edicao.get("doc_mat", "")
+    )
+
+
     col1, col2 = st.columns(2)
 
     with col1:
@@ -353,7 +362,8 @@ if user["papel"] in ["Classificador", "Admin"] and dados:
             atualizar_liberacao(
                 solicitacao_edicao["id"],
                 novo_wb,
-                novo_lote
+                novo_lote,
+                novo_doc_mat
             )
 
             st.success("Registro atualizado.")
