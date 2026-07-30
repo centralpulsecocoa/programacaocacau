@@ -29,7 +29,7 @@ else:
         Use o menu lateral (**Pages**) para navegar entre as telas do sistema:
 
         - 📅 **Programação** — cadastro de agendamentos de recebimento
-        - ⚖️ **Balança** — registro de pesagens (bruto / tara)
+        - 🚛 **Balança** — registro de pesagens (bruto / tara)
         - 📦 **Depósito** — operação de descarga
         - 🔬 **Classificador** — análise de qualidade (sem visualizar o fornecedor)
         - 📊 **Acompanhamento** — painel em tempo real do processo

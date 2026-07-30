@@ -16,7 +16,7 @@ if not usuario_logado():
 user = exigir_papel("Operador de Balança")
 sidebar_usuario()
 
-st.title("⚖️ Operação de Balança")
+st.title("🚛 Operação de Balança")
 st.caption(
     "Registre a pesagem (peso bruto) ao chegar e volte depois para lançar o peso tara."
 )
