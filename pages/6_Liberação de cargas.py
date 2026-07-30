@@ -122,6 +122,7 @@ def listar_pendentes():
         FROM liberacao_cargas lc
         INNER JOIN deposito_operacao dep
             ON dep.id = lc.deposito_operacao_id
+        lc.status = 'PENDENTE'
         ORDER BY lc.solicitado_em DESC
     """)
 
