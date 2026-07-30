@@ -110,9 +110,19 @@ with st.expander("🔎 Filtros", expanded=True):
     with fc4:
         tipo_cacau_sel = st.multiselect("Tipo de cacau", sorted(df["tipo_cacau"].dropna().unique().tolist()))
     with fc5:
-        data_inicio = st.date_input("Data inicial",value=(df["horario"].min().date()))
-    with st.columns(5)[0]: 
-        data_fim = st.date_input("Data Final",value=df["horario"].max().date())
+        dc1, dc2 = st.columns(2)
+
+        with dc1:
+            data_inicio = st.date_input(
+                "Data Inicial",
+                value=df["horario"].min().date()
+            )
+
+        with dc2:
+            data_fim = st.date_input(
+                "Data Final",
+                value=df["horario"].max().date()
+            )
 
 df_filtrado = df.copy()
 if status_sel:
