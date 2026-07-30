@@ -102,6 +102,35 @@ def salvar_liberacao(
     finally:
         conn.close()
 
+def listar_todas():
+    conn = get_connection()
+    cur = get_cursor(conn)
+
+    cur.execute("""
+        SELECT
+            lc.id,
+            lc.wb,
+            lc.lote,
+            lc.doc_mat,
+            dep.numero_carga,
+            lc.status,
+            dep.residuo,
+            dep.peso_duplo,
+            dep.qtd_sacos_amostrados,
+            lc.solicitado_por,
+            lc.solicitado_em
+        FROM liberacao_cargas lc
+        INNER JOIN deposito_operacao dep
+            ON dep.id = lc.deposito_operacao_id
+        ORDER BY lc.solicitado_em DESC
+    """)
+
+    dados = cur.fetchall()
+
+    conn.close()
+
+    return dados
+
 def listar_pendentes():
     conn = get_connection()
     cur = get_cursor(conn)
@@ -269,11 +298,12 @@ dias_filtro = st.slider(
 )
 
 dados = listar_pendentes()
+dados_all = listar_todas()
 
 
 if dados:
 
-    df = pd.DataFrame(dados)
+    df = pd.DataFrame(dados_all)
 
     df["solicitado_em"] = pd.to_datetime(df["solicitado_em"])
 
