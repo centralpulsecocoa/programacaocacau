@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 
 from database import init_db, get_connection
-from auth import sidebar_usuario, usuario_logado
+from auth import sidebar_usuario, usuario_logado,exigir_papel
 
 st.set_page_config(page_title="Acompanhamento", page_icon="📊", layout="wide")
 init_db()
@@ -12,7 +12,7 @@ if not usuario_logado():
     st.warning("Faça login na página inicial para continuar.")
     st.stop()
 
-# Tela de acompanhamento é visível para todos os papéis autenticados.
+user = exigir_papel("Admin","Operador de Balança","Operador de Depósito","Programação")
 sidebar_usuario()
 
 st.title("📊 Acompanhamento em Tempo Real")
