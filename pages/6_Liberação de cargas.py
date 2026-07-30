@@ -19,6 +19,10 @@ sidebar_usuario()
 st.title("🚦 Liberação de cargas")
 st.caption("Atrelar pesagem e lotes ao número de carga.")
 
+if "msg_sucesso" in st.session_state:
+    st.success(st.session_state["msg_sucesso"])
+    del st.session_state["msg_sucesso"]
+
 conn = get_connection()
 
 # ---------------------------------------------------------
@@ -303,7 +307,7 @@ if dados:
                 solicitacao["id"],
                 user["nome_completo"]
             )
-            st.success("Solicitação aprovada.")
+            st.session_state["msg_sucesso"] = "Solicitação aprovada."
             st.rerun()
 
 else:
