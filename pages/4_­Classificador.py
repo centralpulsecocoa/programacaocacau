@@ -27,6 +27,8 @@ conn = get_connection()
 if "form_classificacao_key" not in st.session_state:
     st.session_state.form_classificacao_key = 0
 
+form_key = st.session_state.form_classificacao_key
+
 # ---------------------------------------------------------------------------
 # FILTRO DE DATA (SLIDER)
 # ---------------------------------------------------------------------------
@@ -100,79 +102,33 @@ with tab_nova:
             col1, col2, col3 = st.columns(3)
             with col1:
                 umidade = st.number_input(
-                    "Umidade (%)",min_value=0.0, max_value=100.0, step=0.1, format="%.1f",key="umidade",)
+                    "Umidade (%)",min_value=0.0, max_value=100.0, step=0.1, format="%.1f",key=f"umidade_{form_key}",)
                 fumaca = st.number_input(
-                    "Fumaça (%)", min_value=0.0,max_value=100.0,step=0.1,format="%.1f",key="fumaca",)
+                    "Fumaça (%)", min_value=0.0,max_value=100.0,step=0.1,format="%.1f",key=f"fumaca_{form_key}",)
                 ardosia = st.number_input(
-                    "Ardósia",min_value=0.0,step=0.1,format="%.1f",key="ardosia",)
+                    "Ardósia",min_value=0.0,step=0.1,format="%.1f",key=f"ardosia_{form_key}",)
                 germinado = st.number_input(
-                    "Germinado",min_value=0.0,step=0.1,format="%.1f",key="germinado",)
+                    "Germinado",min_value=0.0,step=0.1,format="%.1f",key=f"germinado_{form_key}",)
 
             with col2:
                 violeta = st.number_input(
-                    "Violeta",
-                    min_value=0.0,
-                    step=0.1,
-                    format="%.1f",
-                    key="violeta",
-                )
-
+                    "Violeta", min_value=0.0,step=0.1,format="%.1f",key=f"violeta{form_key}",)
                 mofo_interno = st.number_input(
-                    "Mofo interno",
-                    min_value=0.0,
-                    step=0.1,
-                    format="%.1f",
-                    key="mofo_interno",
-                )
-
+                    "Mofo interno", min_value=0.0, step=0.1, format="%.1f", key=f"mofo_interno_{form_key}",)
                 mofo_externo = st.number_input(
-                    "Mofo externo",
-                    min_value=0.0,
-                    step=0.1,
-                    format="%.1f",
-                    key="mofo_externo",
-                )
-
+                    "Mofo externo", min_value=0.0, step=0.1, format="%.1f", key=f"mofo_externo_{form_key}",)
                 infestado = st.number_input(
-                    "Infestado",
-                    min_value=0,
-                    step=1,
-                    key="infestado",
-                )
+                    "Infestado", min_value=0, step=1, key=f"infestado_{form_key}",)
 
             with col3:
                 bean_count = st.number_input(
-                    "Bean count",
-                    min_value=0.0,
-                    step=1.0,
-                    format="%.1f",
-                    key="bean_count",
-                )
-
+                    "Bean count", min_value=0.0, step=1.0, format="%.1f", key=f"bean_count_{form_key}", )
                 achatado = st.number_input(
-                    "Achatado (%)",
-                    min_value=0.0,
-                    max_value=100.0,
-                    step=0.1,
-                    format="%.1f",
-                    key="achatado",
-                )
-
+                    "Achatado (%)",min_value=0.0,max_value=100.0,step=0.1,format="%.1f",key=f"achatado_{form_key}",)
                 ffa = st.number_input(
-                    "FFA",
-                    min_value=0.0,
-                    step=0.1,
-                    format="%.2f",
-                    key="ffa",
-                )
-
+                    "FFA",min_value=0.0,step=0.1,format="%.2f",key=f"ffa_{form_key}",)
                 teor_casca = st.number_input(
-                    "Teor de casca",
-                    min_value=0.0,
-                    step=0.1,
-                    format="%.2f",
-                    key="teor_casca",
-                )
+                    "Teor de casca",min_value=0.0,step=0.1,format="%.2f",key=f"teor_casca_{form_key}",)
 
             tipo_classificacao = st.text_input("Tipo de classificação")
             salvar = st.form_submit_button("💾 Registrar classificação", use_container_width=True)
