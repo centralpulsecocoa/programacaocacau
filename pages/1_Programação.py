@@ -108,7 +108,7 @@ if df.empty:
     st.info("Nenhuma programação encontrada para os filtros selecionados.")
 else:
     df.columns = [
-        "ID", "Horário", "Fornecedor", "Depósito", "Qtd. Sacos", "Tipo de Contrato", "Tipo de Cacau"
+        "ID", "Horário", "Fornecedor", "Depósito", "Qtd. Sacos", "Criado Por","Tipo de Contrato", "Tipo de Cacau"
     ]
     st.dataframe(df, use_container_width=True, hide_index=True)
 
