@@ -89,7 +89,7 @@ with col_filtro3:
 
 # Montar query com filtros
 query = """
-    SELECT id, horario, fornecedor, deposito, qtd_sacos, tipo_contrato, tipo_cacau
+    SELECT id, horario, fornecedor, deposito, qtd_sacos, criado_por, tipo_contrato, tipo_cacau
     FROM programacoes
     WHERE DATE(horario) >= %s AND DATE(horario) <= %s
 """
