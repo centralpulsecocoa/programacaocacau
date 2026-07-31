@@ -23,6 +23,10 @@ st.caption(
 
 conn = get_connection()
 
+# Zerando chave dinamica da classificação:
+if "form_classificacao_key" not in st.session_state:
+    st.session_state.form_classificacao_key = 0
+
 # ---------------------------------------------------------------------------
 # FILTRO DE DATA (SLIDER)
 # ---------------------------------------------------------------------------
@@ -92,7 +96,7 @@ with tab_nova:
         escolha = st.selectbox("Selecione a carga para classificar", list(opcoes.keys()))
         deposito_operacao_id = opcoes[escolha]
 
-        with st.form("form_classificacao"):
+        with st.form(f"form_classificacao_{st.session_state.form_classificacao_key}"):
             col1, col2, col3 = st.columns(3)
             with col1:
                 umidade = st.number_input(
