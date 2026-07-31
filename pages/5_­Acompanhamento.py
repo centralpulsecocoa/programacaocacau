@@ -55,7 +55,6 @@ df = pd.read_sql_query(
     conn,
 )
 
-
 def calcular_status(row):
     if pd.notna(row["ffa"]):
         return "✅ Finalizado"
@@ -87,12 +86,21 @@ df["etapa_atual"] = df.apply(calcular_etapa, axis=1)
 # Garantir tipo datetime
 df["horario"] = pd.to_datetime(df["horario"])
 
+hoje = datetime.date.today()
+df_hoje = df[df["horario"].dt.date == hoje]
+
 # --- Métricas resumo ---
+# col1, col2, col3, col4 = st.columns(4)
+# col1.metric("Total de programações", len(df))
+# col2.metric("⚪ Não iniciado", int((df["status"] == "⚪ Não iniciado").sum()))
+# col3.metric("🟡 Em progresso", int((df["status"] == "🟡 Em progresso").sum()))
+# col4.metric("✅ Finalizado", int((df["status"] == "✅ Finalizado").sum()))
+
 col1, col2, col3, col4 = st.columns(4)
-col1.metric("Total de programações", len(df))
-col2.metric("⚪ Não iniciado", int((df["status"] == "⚪ Não iniciado").sum()))
-col3.metric("🟡 Em progresso", int((df["status"] == "🟡 Em progresso").sum()))
-col4.metric("✅ Finalizado", int((df["status"] == "✅ Finalizado").sum()))
+col1.metric("Programações Hoje", len(df_hoje))
+col2.metric( "⚪ Não iniciado", int((df_hoje["status"] == "⚪ Não iniciado").sum()))
+col3.metric("🟡 Em progresso", int((df_hoje["status"] == "🟡 Em progresso").sum()))
+col4.metric("✅ Finalizado", int((df_hoje["status"] == "✅ Finalizado").sum()))
 
 st.markdown("---")
 
