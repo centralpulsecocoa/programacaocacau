@@ -207,23 +207,7 @@ with tab_nova:
                     ),
                 )
                 conn.commit()
-
-                for campo in [
-                    "umidade",
-                    "fumaca",
-                    "ardosia",
-                    "germinado",
-                    "violeta",
-                    "mofo_interno",
-                    "mofo_externo",
-                    "infestado",
-                    "bean_count",
-                    "achatado",
-                    "ffa",
-                    "teor_casca",
-                ]:
-                    st.session_state[campo] = 0
-
+                st.session_state.form_classificacao_key += 1
                 st.success("Classificação registrada com sucesso!")
                 st.rerun()
 
