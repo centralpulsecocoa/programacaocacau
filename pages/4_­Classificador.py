@@ -95,20 +95,80 @@ with tab_nova:
         with st.form("form_classificacao"):
             col1, col2, col3 = st.columns(3)
             with col1:
-                umidade = st.number_input("Umidade (%)", min_value=0.0, max_value=100.0, step=0.1, format="%.1f")
-                fumaca = st.number_input("Fumaça (%)", min_value=0.0, max_value=100.0, step=0.1, format="%.1f")
-                ardosia = st.number_input("Ardósia", min_value=0.0, step=0.1, format="%.1f")
-                germinado = st.number_input("Germinado", min_value=0.0, step=0.1, format="%.1f")
+                umidade = st.number_input(
+                    "Umidade (%)",min_value=0.0, max_value=100.0, step=0.1, format="%.1f",key="umidade",)
+                fumaca = st.number_input(
+                    "Fumaça (%)", min_value=0.0,max_value=100.0,step=0.1,format="%.1f",key="fumaca",)
+                ardosia = st.number_input(
+                    "Ardósia",min_value=0.0,step=0.1,format="%.1f",key="ardosia",)
+                germinado = st.number_input(
+                    "Germinado",min_value=0.0,step=0.1,format="%.1f",key="germinado",)
+
             with col2:
-                violeta = st.number_input("Violeta", min_value=0.0, step=0.1, format="%.1f")
-                mofo_interno = st.number_input("Mofo interno", min_value=0.0, step=0.1, format="%.1f")
-                mofo_externo = st.number_input("Mofo externo", min_value=0.0, step=0.1, format="%.1f")
-                infestado = st.number_input("Infestado", min_value=0, step=1)
+                violeta = st.number_input(
+                    "Violeta",
+                    min_value=0.0,
+                    step=0.1,
+                    format="%.1f",
+                    key="violeta",
+                )
+
+                mofo_interno = st.number_input(
+                    "Mofo interno",
+                    min_value=0.0,
+                    step=0.1,
+                    format="%.1f",
+                    key="mofo_interno",
+                )
+
+                mofo_externo = st.number_input(
+                    "Mofo externo",
+                    min_value=0.0,
+                    step=0.1,
+                    format="%.1f",
+                    key="mofo_externo",
+                )
+
+                infestado = st.number_input(
+                    "Infestado",
+                    min_value=0,
+                    step=1,
+                    key="infestado",
+                )
+
             with col3:
-                bean_count = st.number_input("Bean count", min_value=0.0, step=1.0, format="%.1f")
-                achatado = st.number_input("Achatado (%)", min_value=0.0, max_value=100.0, step=0.1, format="%.1f")
-                ffa = st.number_input("FFA", min_value=0.0, step=0.1, format="%.2f")
-                teor_casca = st.number_input("Teor de casca", min_value=0.0, step=0.1, format="%.2f")
+                bean_count = st.number_input(
+                    "Bean count",
+                    min_value=0.0,
+                    step=1.0,
+                    format="%.1f",
+                    key="bean_count",
+                )
+
+                achatado = st.number_input(
+                    "Achatado (%)",
+                    min_value=0.0,
+                    max_value=100.0,
+                    step=0.1,
+                    format="%.1f",
+                    key="achatado",
+                )
+
+                ffa = st.number_input(
+                    "FFA",
+                    min_value=0.0,
+                    step=0.1,
+                    format="%.2f",
+                    key="ffa",
+                )
+
+                teor_casca = st.number_input(
+                    "Teor de casca",
+                    min_value=0.0,
+                    step=0.1,
+                    format="%.2f",
+                    key="teor_casca",
+                )
 
             tipo_classificacao = st.text_input("Tipo de classificação")
             salvar = st.form_submit_button("💾 Registrar classificação", use_container_width=True)
@@ -143,6 +203,23 @@ with tab_nova:
                     ),
                 )
                 conn.commit()
+
+                for campo in [
+                    "umidade",
+                    "fumaca",
+                    "ardosia",
+                    "germinado",
+                    "violeta",
+                    "mofo_interno",
+                    "mofo_externo",
+                    "infestado",
+                    "bean_count",
+                    "achatado",
+                    "ffa",
+                    "teor_casca",
+                ]:
+                    st.session_state[campo] = 0
+
                 st.success("Classificação registrada com sucesso!")
                 st.rerun()
 
