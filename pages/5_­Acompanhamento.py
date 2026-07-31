@@ -1,7 +1,7 @@
 
 import streamlit as st
 import pandas as pd
-
+import datetime
 from database import init_db, get_connection
 from auth import sidebar_usuario, usuario_logado,exigir_papel
 
@@ -115,13 +115,13 @@ with st.expander("🔎 Filtros", expanded=True):
         with dc1:
             data_inicio = st.date_input(
                 "Data Inicial",
-                value=df["horario"].min().date()
+                value=datetime.date.today()
             )
 
         with dc2:
             data_fim = st.date_input(
                 "Data Final",
-                value=df["horario"].max().date()
+                value=datetime.date.today()
             )
 
 df_filtrado = df.copy()
