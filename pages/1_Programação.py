@@ -57,15 +57,15 @@ with st.expander("➕ Nova Programação", expanded=True):
             # Soma dos sacos já programados para a filial na data
             cur.execute(
                 """
-                SELECT COALESCE(SUM(qtd_sacos), 0)
+                SELECT COALESCE(SUM(qtd_sacos), 0) AS total
                 FROM programacoes
                 WHERE DATE(horario) = %s
                 AND deposito = %s
                 """,
                 (data_agendamento, deposito),
             )
-
-            total_dia = cur.fetchone()[0]
+            resultado = cur.fetchone()
+            total_dia = resultado['total']
 
             if total_dia + int(qtd_sacos) > 2000:
                 disponivel = max(0, 2000 - total_dia)
