@@ -190,6 +190,7 @@ st.dataframe(
     hide_index=True,
     column_config={
         "Status": st.column_config.TextColumn(width="medium"),
+        "Fornecedor":st.column_config.TextColumn(width="large")
     },
 )
 
