@@ -89,12 +89,6 @@ df["horario"] = pd.to_datetime(df["horario"])
 hoje = datetime.date.today()
 df_hoje = df[df["horario"].dt.date == hoje]
 
-# --- Métricas resumo ---
-# col1, col2, col3, col4 = st.columns(4)
-# col1.metric("Total de programações", len(df))
-# col2.metric("⚪ Não iniciado", int((df["status"] == "⚪ Não iniciado").sum()))
-# col3.metric("🟡 Em progresso", int((df["status"] == "🟡 Em progresso").sum()))
-# col4.metric("✅ Finalizado", int((df["status"] == "✅ Finalizado").sum()))
 
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Programações Hoje", len(df_hoje))
@@ -177,6 +171,18 @@ colunas_exibir = {
 }
 
 df_exibicao = df_filtrado[list(colunas_exibir.keys())].rename(columns=colunas_exibir)
+
+# Formatar colunas de data/hora
+colunas_data = [
+    "Horário Programado",
+    "Início Descarga",
+    "Fim Descarga",
+]
+
+for col in colunas_data:
+    if col in df_exibicao.columns:
+        df_exibicao[col] = pd.to_datetime(df_exibicao[col], errors="coerce").dt.strftime("%d/%m/%Y %H:%M")
+
 
 st.dataframe(
     df_exibicao,
