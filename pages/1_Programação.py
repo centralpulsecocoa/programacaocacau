@@ -50,26 +50,53 @@ with st.expander("➕ Nova Programação", expanded=True):
 
         if enviado:
             horario = datetime.datetime.combine(data_agendamento, hora_agendamento)
+
             conn = get_connection()
             cur = get_cursor(conn)
+
+            # Soma dos sacos já programados para a filial na data
             cur.execute(
-                """INSERT INTO programacoes
-                   (horario, fornecedor, deposito, qtd_sacos, tipo_contrato, tipo_cacau, criado_por, criado_em)
-                   VALUES (%s,%s,%s,%s,%s,%s,%s,%s)""",
-                (
-                    horario.strftime("%Y-%m-%d %H:%M:%S"),
-                    fornecedor,
-                    deposito,
-                    int(qtd_sacos),
-                    tipo_contrato,
-                    tipo_cacau,
-                    user["username"],
-                    agora(),
-                ),
+                """
+                SELECT COALESCE(SUM(qtd_sacos), 0)
+                FROM programacoes
+                WHERE DATE(horario) = %s
+                AND deposito = %s
+                """,
+                (data_agendamento, deposito),
             )
-            conn.commit()
-            st.success("Programação adicionada com sucesso!")
-            st.rerun()
+
+            total_dia = cur.fetchone()[0]
+
+            if total_dia + int(qtd_sacos) > 2000:
+                disponivel = max(0, 2000 - total_dia)
+                st.error(
+                    f"Limite diário excedido para a filial '{deposito}'. "
+                    f"Já existem {total_dia} sacos programados e restam apenas "
+                    f"{disponivel} sacos disponíveis para esta data."
+                )
+            else:
+                cur.execute(
+                    """
+                    INSERT INTO programacoes
+                    (horario, fornecedor, deposito, qtd_sacos,
+                    tipo_contrato, tipo_cacau, criado_por, criado_em)
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                    """,
+                    (
+                        horario.strftime("%Y-%m-%d %H:%M:%S"),
+                        fornecedor,
+                        deposito,
+                        int(qtd_sacos),
+                        tipo_contrato,
+                        tipo_cacau,
+                        user["username"],
+                        agora(),
+                    ),
+                )
+
+                conn.commit()
+                st.success("Programação adicionada com sucesso!")
+                st.rerun()
 
 st.markdown("---")
 
