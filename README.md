@@ -20,19 +20,6 @@ de acesso por papel e acompanhamento em tempo real do processo.
 O banco de dados SQLite é criado automaticamente na primeira execução em
 `data/deposito.db`, já com usuários e listas de demonstração.
 
-## Usuários padrão
-
-| Usuário | Senha | Papel |
-|---|---|---|
-| admin | admin123 | Admin (acesso total) |
-| programacao | 123456 | Programação |
-| balanca | 123456 | Operador de Balança |
-| deposito | 123456 | Operador de Depósito |
-| classificador | 123456 | Classificador |
-
-⚠️ **Troque essas senhas** (ou crie novos usuários e desative os padrão) antes
-de usar em produção — vá em ⚙️ **Admin → Usuários**.
-
 ## Estrutura das telas
 
 | Página | Papel(éis) com acesso | Função |
