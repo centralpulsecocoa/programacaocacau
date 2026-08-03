@@ -192,6 +192,15 @@ else:
                         index=tipos_cacau.index(registro["tipo_cacau"]) if registro["tipo_cacau"] in tipos_cacau else 0,
                         key=f"edit_tca{suffix}"
                     ) if tipos_cacau else st.text_input("Tipo de cacau", value=registro["tipo_cacau"])
+                    edit_apanha = st.selectbox(
+                        "Apanha",
+                        apanha_lista,
+                        index=apanha_lista.index(registro["apanha"]) if registro["apanha"] in apanha_lista else 0,
+                        key=f"edit_apanha{suffix}"
+                    ) if apanha_lista else st.text_input(
+                        "Apanha",
+                        value=registro["apanha"]
+                    )   
 
                 col_btn1, col_btn2 = st.columns(2)
                 with col_btn1:
@@ -204,7 +213,7 @@ else:
                     cur = get_cursor(conn)
                     cur.execute(
                         """UPDATE programacoes
-                           SET horario=%s, fornecedor=%s, deposito=%s, qtd_sacos=%s, tipo_contrato=%s, tipo_cacau=%s
+                           SET horario=%s, fornecedor=%s, deposito=%s, qtd_sacos=%s, tipo_contrato=%s, tipo_cacau=%s,apanha=%s
                            WHERE id=%s""",
                         (
                             novo_horario.strftime("%Y-%m-%d %H:%M:%S"),
@@ -213,6 +222,7 @@ else:
                             int(edit_qtd),
                             edit_tipo_contrato,
                             edit_tipo_cacau,
+                            edit_apanha,
                             int(id_editar),
                         ),
                     )
