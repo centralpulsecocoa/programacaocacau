@@ -23,6 +23,7 @@ fornecedores = get_lista("fornecedor")
 depositos = get_lista("deposito")
 tipos_contrato = get_lista("tipo_contrato")
 tipos_cacau = get_lista("tipo_cacau")
+apanha_lista = ["Apanha", "Entrega pelo fornecedor"]
 
 if not fornecedores or not depositos or not tipos_contrato or not tipos_cacau:
     st.warning(
@@ -45,6 +46,7 @@ with st.expander("➕ Nova Programação", expanded=True):
             qtd_sacos = st.number_input("Quantidade de sacos", min_value=1, step=1)
             tipo_contrato = st.selectbox("Tipo de contrato", tipos_contrato, key="novo_tc") if tipos_contrato else st.text_input("Tipo de contrato")
             tipo_cacau = st.selectbox("Tipo de cacau", tipos_cacau, key="novo_tca") if tipos_cacau else st.text_input("Tipo de cacau")
+            apanha = st.selectbox("Apanha",apanha_lista)
 
         enviado = st.form_submit_button("➕ Adicionar programação", use_container_width=True)
 
@@ -79,8 +81,8 @@ with st.expander("➕ Nova Programação", expanded=True):
                     """
                     INSERT INTO programacoes
                     (horario, fornecedor, deposito, qtd_sacos,
-                    tipo_contrato, tipo_cacau, criado_por, criado_em)
-                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+                    tipo_contrato, tipo_cacau, criado_por, criado_em,apanha)
+                    VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)
                     """,
                     (
                         horario.strftime("%Y-%m-%d %H:%M:%S"),
@@ -91,6 +93,7 @@ with st.expander("➕ Nova Programação", expanded=True):
                         tipo_cacau,
                         user["username"],
                         agora(),
+                        apanha,
                     ),
                 )
 
@@ -116,7 +119,7 @@ with col_filtro3:
 
 # Montar query com filtros
 query = """
-    SELECT id, horario, fornecedor, deposito, qtd_sacos, criado_por, tipo_contrato, tipo_cacau
+    SELECT id, horario, fornecedor, deposito, qtd_sacos, criado_por, apanha, tipo_contrato, tipo_cacau
     FROM programacoes
     WHERE DATE(horario) >= %s AND DATE(horario) <= %s
 """
@@ -135,7 +138,7 @@ if df.empty:
     st.info("Nenhuma programação encontrada para os filtros selecionados.")
 else:
     df.columns = [
-        "ID", "Horário", "Fornecedor", "Depósito", "Qtd. Sacos", "Criado Por","Tipo de Contrato", "Tipo de Cacau"
+        "ID", "Horário", "Fornecedor", "Depósito", "Qtd. Sacos", "Criado Por","Apanha","Tipo de Contrato", "Tipo de Cacau"
     ]
     st.dataframe(df, use_container_width=True, hide_index=True)
 

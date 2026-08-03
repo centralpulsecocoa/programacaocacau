@@ -151,6 +151,7 @@ colunas_exibir = {
     "deposito": "Depósito",
     "qtd_sacos": "Qtd. Sacos (Prog.)",
     "tipo_contrato": "Tipo Contrato",
+    "apanha":"Apanha/Fornecedor",
     "tipo_cacau": "Tipo Cacau",
     "wb": "WB",
     "nota_fiscal": "Nota Fiscal",

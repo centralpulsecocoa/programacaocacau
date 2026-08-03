@@ -100,7 +100,8 @@ def init_db():
                 tipo_contrato TEXT NOT NULL,
                 tipo_cacau TEXT NOT NULL,
                 criado_por TEXT,
-                criado_em TEXT
+                criado_em TEXT,
+                apanha TEXT
             )
         """)
     
