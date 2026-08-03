@@ -154,7 +154,7 @@ else:
     if id_editar:
         cur = get_cursor(conn)
         cur.execute(
-            "SELECT horario, fornecedor, deposito, qtd_sacos, tipo_contrato, tipo_cacau FROM programacoes WHERE id = %s",
+            "SELECT horario, fornecedor, deposito, qtd_sacos, apanha, tipo_contrato, tipo_cacau FROM programacoes WHERE id = %s",
             (int(id_editar),),
         )
         registro = cur.fetchone()
