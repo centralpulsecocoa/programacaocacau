@@ -31,6 +31,7 @@ df = pd.read_sql_query(
         p.tipo_contrato,
         p.tipo_cacau,
         b.wb,
+        p.apanha,
         b.nota_fiscal,
         b.peso_bruto,
         b.peso_tara,
