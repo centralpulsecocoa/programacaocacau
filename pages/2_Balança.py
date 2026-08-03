@@ -69,13 +69,22 @@ tab_nova, tab_tara, tab_editar = st.tabs(["ðŸ†• Nova pesagem (peso bruto)", "ðŸ”
 with tab_nova:
     programacoes_pendentes = pd.read_sql_query(
         """
-        SELECT p.id, p.horario, p.fornecedor, p.deposito, p.qtd_sacos, p.tipo_contrato, p.tipo_cacau
+        SELECT
+            p.id,
+            p.horario,
+            p.fornecedor,
+            p.deposito,
+            p.qtd_sacos,
+            p.tipo_contrato,
+            p.tipo_cacau
         FROM programacoes p
         LEFT JOIN balanca b ON b.programacao_id = p.id
         WHERE b.id IS NULL
+        AND p.horario::date BETWEEN %s AND %s
         ORDER BY p.horario
         """,
         conn,
+        params=(data_inicio_filtro, data_fim_filtro)
     )
 
     if programacoes_pendentes.empty:
