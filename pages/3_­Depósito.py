@@ -65,14 +65,24 @@ tab_nova, tab_editar = st.tabs(["🆕 Nova operação de descarga", "✏️ Edit
 with tab_nova:
     pendentes = pd.read_sql_query(
         """
-        SELECT b.id AS balanca_id, b.wb, p.fornecedor, p.deposito, p.qtd_sacos, b.peso_liquido
+        SELECT
+            b.id AS balanca_id,
+            b.wb,
+            p.fornecedor,
+            p.deposito,
+            p.qtd_sacos,
+            b.peso_liquido
         FROM balanca b
-        JOIN programacoes p ON p.id = b.programacao_id
-        LEFT JOIN deposito_operacao d ON d.balanca_id = b.id
+        JOIN programacoes p
+            ON p.id = b.programacao_id
+        LEFT JOIN deposito_operacao d
+            ON d.balanca_id = b.id
         WHERE d.id IS NULL
+        AND DATE(b.data_pesagem_tara) BETWEEN %s AND %s
         ORDER BY b.data_pesagem_tara
         """,
         conn,
+        params=(data_inicio_filtro, data_fim_filtro)
     )
     if pendentes.empty:
         st.info("Não há pesagens concluídas aguardando operação de depósito.")
