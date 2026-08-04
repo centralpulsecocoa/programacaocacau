@@ -78,8 +78,8 @@ with tab_nova:
         LEFT JOIN deposito_operacao d
             ON d.balanca_id = b.id
         WHERE d.id IS NULL
-        AND DATE(b.data_pesagem_tara) BETWEEN %s AND %s
-        ORDER BY b.data_pesagem_tara
+        AND DATE(b.data_pesagem_bruto) BETWEEN %s AND %s
+        ORDER BY b.data_pesagem_bruto
         """,
         conn,
         params=(data_inicio_filtro, data_fim_filtro)
